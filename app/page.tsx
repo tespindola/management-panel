@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { DollarSign, TrendingUp, TrendingDown, FileText, Plus } from "lucide-react"
+import { DollarSign, TrendingUp, TrendingDown, FileText, Plus, Download, Upload } from "lucide-react"
 import { format, addMonths } from "date-fns"
 import { DebtForm } from "../components/debt-form"
 import { IncomeForm } from "../components/income-form"
@@ -199,6 +199,70 @@ export default function DebtManagementPanel() {
     saveToStorage("partialPayments", updatedPayments)
   }
 
+  // Funciones para exportar/importar datos
+  const exportData = () => {
+    const allData = {
+      debts,
+      incomes,
+      paymentPlans,
+      projections,
+      partialPayments,
+      exportDate: new Date().toISOString()
+    }
+    
+    const dataStr = JSON.stringify(allData, null, 2)
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr)
+    
+    const exportFileDefaultName = `panel-gestion-${format(new Date(), 'yyyy-MM-dd')}.json`
+    
+    const linkElement = document.createElement('a')
+    linkElement.setAttribute('href', dataUri)
+    linkElement.setAttribute('download', exportFileDefaultName)
+    linkElement.click()
+  }
+
+  const importData = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target?.result as string)
+        
+        // Cargar todos los datos importados
+        if (importedData.debts) {
+          setDebts(importedData.debts)
+          saveToStorage("debts", importedData.debts)
+        }
+        if (importedData.incomes) {
+          setIncomes(importedData.incomes)
+          saveToStorage("incomes", importedData.incomes)
+        }
+        if (importedData.paymentPlans) {
+          setPaymentPlans(importedData.paymentPlans)
+          saveToStorage("paymentPlans", importedData.paymentPlans)
+        }
+        if (importedData.projections) {
+          setProjections(importedData.projections)
+          saveToStorage("projections", importedData.projections)
+        }
+        if (importedData.partialPayments) {
+          setPartialPayments(importedData.partialPayments)
+          saveToStorage("partialPayments", importedData.partialPayments)
+        }
+        
+        alert('Datos importados exitosamente')
+      } catch (error) {
+        alert('Error al importar los datos. Verifique que el archivo sea válido.')
+      }
+    }
+    reader.readAsText(file)
+    
+    // Limpiar el input para permitir seleccionar el mismo archivo nuevamente
+    event.target.value = ''
+  }
+
   // Filtrar por mes seleccionado
   const filteredDebts = debts.filter((debt) => debt.dueDate.startsWith(selectedMonth))
   const filteredIncomes = incomes.filter((income) => income.expectedDate.startsWith(selectedMonth))
@@ -253,6 +317,31 @@ export default function DebtManagementPanel() {
               onChange={(e) => setSelectedMonth(e.target.value)}
               className="w-40"
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={exportData}
+              title="Exportar datos"
+            >
+              <Download className="h-4 w-4" />
+            </Button>
+            <input
+              type="file"
+              accept=".json"
+              onChange={importData}
+              className="hidden"
+              id="import-file"
+            />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => document.getElementById('import-file')?.click()}
+              title="Importar datos"
+            >
+              <Upload className="h-4 w-4" />
+            </Button>
           </div>
           <LanguageToggle />
           <ThemeToggle />
