@@ -38,7 +38,7 @@ export function DebtCard({
   const statusText = debt.status === "pending" ? t("pending") : debt.status === "paid" ? t("paid") : t("received")
 
   return (
-    <div className="border rounded-lg p-3 space-y-3 bg-card">
+    <div className="border rounded-lg p-3 space-y-3 bg-background">
       <div className="flex justify-between items-start">
         <div className="flex-1 min-w-0">
           <h4 className="font-medium truncate">{debt.description}</h4>
