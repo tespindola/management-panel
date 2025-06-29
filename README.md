@@ -54,24 +54,24 @@ Un sistema completo y moderno para administrar tus deudas personales, ingresos y
 ### Instalación
 
 1. **Clona el repositorio**
-   \`\`\`bash
+   ```bash
    git clone https://github.com/tu-usuario/debt-management-panel.git
    cd debt-management-panel
-   \`\`\`
+   ```
 
 2. **Instala las dependencias**
-   \`\`\`bash
+   ```bash
    npm install
    # o
    yarn install
-   \`\`\`
+   ```
 
 3. **Ejecuta el proyecto**
-   \`\`\`bash
+   ```bash
    npm run dev
    # o
    yarn dev
-   \`\`\`
+   ```
 
 4. **Abre tu navegador**
    Visita [http://localhost:3000](http://localhost:3000)
@@ -117,7 +117,7 @@ Un sistema completo y moderno para administrar tus deudas personales, ingresos y
 
 ## 📁 Estructura del Proyecto
 
-\`\`\`
+```
 debt-management-panel/
 ├── app/
 │   ├── globals.css          # Estilos globales y variables CSS
@@ -139,13 +139,13 @@ debt-management-panel/
 │   └── use-translations.ts  # Hook para manejo de traducciones
 └── lib/
     └── utils.ts             # Utilidades y helpers
-\`\`\`
+```
 
 ## 💾 Estructura de Datos
 
 Los datos se almacenan en localStorage con la siguiente estructura:
 
-\`\`\`json
+```json
 {
   "debts": [
     {
@@ -192,7 +192,7 @@ Los datos se almacenan en localStorage con la siguiente estructura:
     }
   ]
 }
-\`\`\`
+```
 
 ## 🎨 Personalización
 
@@ -205,23 +205,23 @@ Los datos se almacenan en localStorage con la siguiente estructura:
 - Idiomas disponibles: Español, English
 
 ### Agregar Nuevas Traducciones
-Edita el archivo \`hooks/use-translations.ts\`:
+Edita el archivo `hooks/use-translations.ts`:
 
-\`\`\`typescript
+```typescript
 const translations = {
   "nueva.clave": {
     es: "Texto en español",
     en: "Text in English"
   }
 }
-\`\`\`
+```
 
 ## 🤝 Contribuir
 
 1. Fork el proyecto
-2. Crea una rama para tu feature (\`git checkout -b feature/AmazingFeature\`)
-3. Commit tus cambios (\`git commit -m 'Add some AmazingFeature'\`)
-4. Push a la rama (\`git push origin feature/AmazingFeature\`)
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
 
 ## 📝 Roadmap
@@ -237,7 +237,7 @@ const translations = {
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT. Ver el archivo \`LICENSE\` para más detalles.
+Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
 ## 👨‍💻 Autor
 
