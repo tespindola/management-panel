@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
-const isDev = require('electron-is-dev');
+const isDev = !app.isPackaged;
 
 function createWindow() {
   // Create the browser window.
@@ -8,8 +8,8 @@ function createWindow() {
     width: 800,
     height: 600,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false, // Required for Next.js output
+      //nodeIntegration: true,
+      contextIsolation: true, // Required for Next.js output
       preload: path.join(__dirname, 'preload.js'),
     },
   });
@@ -18,8 +18,6 @@ function createWindow() {
   if (isDev) {
     // In development, load from the Next.js dev server
     win.loadURL('http://localhost:3000');
-    // Open the DevTools.
-    win.webContents.openDevTools();
   } else {
     // In production, load the exported Next.js static files
     win.loadFile(path.join(__dirname, 'out/index.html'));

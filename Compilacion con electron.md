@@ -37,8 +37,7 @@ Asegúrate de tener Node.js y npm (o Yarn) instalados en tu sistema. Puedes desc
     npm run electron:build
     ```
     Este comando realizará las siguientes acciones:
-    *   `next build`: Compila la aplicación Next.js para producción.
-    *   `next export`: Exporta la aplicación Next.js a archivos HTML/CSS/JS estáticos en el directorio `out/`.
+    *   `next build`: Compila la aplicación Next.js para producción y la exporta a archivos HTML/CSS/JS estáticos en el directorio `out/` (gracias a la configuración `output: 'export'` en `next.config.mjs`).
     *   `electron-builder`: Empaqueta los archivos de `out/` junto con el código de Electron (`main.js`, `preload.js`) en un ejecutable e instalador.
 
     Los artefactos de compilación (ejecutables, instaladores) se encontrarán en el directorio `dist/`.

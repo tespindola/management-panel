@@ -9,8 +9,12 @@ import { TrendingUp, TrendingDown, DollarSign, Calendar, PieChart } from "lucide
 
 export function ReportsSection({ debts, incomes, projections, partialPayments = [], selectedMonth }: any) {
   const currentDate = new Date()
-  const previousMonth = format(subMonths(new Date(selectedMonth + "-01"), 1), "yyyy-MM")
-  const nextMonth = format(addMonths(new Date(selectedMonth + "-01"), 1), "yyyy-MM")
+  // Forma más robusta de crear la fecha
+  const [year, month] = selectedMonth.split('-').map(Number);
+  const baseDate = new Date(year, month - 1, 1); // Los meses en Date son 0-indexados
+
+  const previousMonth = format(subMonths(baseDate, 1), "yyyy-MM");
+  const nextMonth = format(addMonths(baseDate, 1), "yyyy-MM");
 
   // Función para calcular pagos parciales por deuda
   const getPartialPaymentsForDebt = (debtId: string) => {
@@ -21,6 +25,7 @@ export function ReportsSection({ debts, incomes, projections, partialPayments = 
 
   // Función para obtener datos de un mes específico
   const getMonthData = (month: string) => {
+    console.log(month)
     const monthDebts = debts.filter((d: any) => d.dueDate.startsWith(month))
     const monthIncomes = incomes.filter((i: any) => i.expectedDate.startsWith(month))
     const monthPartialPayments = partialPayments.filter((p: any) => p.date.startsWith(month))
@@ -73,11 +78,19 @@ export function ReportsSection({ debts, incomes, projections, partialPayments = 
   }
 
   const currentMonthData = getMonthData(selectedMonth)
+
+  //console.log(previousMonth, nextMonth);
   const previousMonthData = getMonthData(previousMonth)
   const nextMonthData = getMonthData(nextMonth)
 
   // Datos de proyecciones
   const monthProjections = projections.filter((p: any) => p.month === nextMonth)
+
+  const monthCards = [
+    { title: "Mes Anterior", data: previousMonthData, year: previousMonth.split('-').map(Number)[0], month: previousMonth.split('-').map(Number)[1], key: `prev-${previousMonth}` },
+    { title: "Mes Actual", data: currentMonthData, year: selectedMonth.split('-').map(Number)[0], month: selectedMonth.split('-').map(Number)[1], highlight: true, key: `current-${selectedMonth}` },
+    { title: "Próximo Mes", data: nextMonthData, year: nextMonth.split('-').map(Number)[0], month: nextMonth.split('-').map(Number)[1], key: `next-${nextMonth}` },
+  ]
 
   return (
     <div className="space-y-6">
@@ -96,19 +109,15 @@ export function ReportsSection({ debts, incomes, projections, partialPayments = 
 
         <TabsContent value="overview" className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { title: "Mes Anterior", data: previousMonthData, month: previousMonth },
-              { title: "Mes Actual", data: currentMonthData, month: selectedMonth, highlight: true },
-              { title: "Próximo Mes", data: nextMonthData, month: nextMonth },
-            ].map(({ title, data, month, highlight }) => (
-              <Card key={month} className={highlight ? "ring-2 ring-blue-500" : ""}>
+            {monthCards.map(({ title, data, year, month, highlight, key }) => (
+              <Card key={key} className={highlight ? "ring-2 ring-blue-500" : ""}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     {title}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    {format(new Date(month + "-01"), "MMMM yyyy", { locale: es })}
+                    {format(new Date(year, month - 1, 1), "MMMM yyyy", { locale: es })}
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-3">
